@@ -18,6 +18,7 @@ qt_add_qml_module(appEMpro
     QML_FILES Main.qml
     SOURCES datamodel.h datamodel.cpp
     SOURCES dataitem.h dataitem.cpp
+    SOURCES modbusmodel.h modbusmodel.cpp
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

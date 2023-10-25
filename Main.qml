@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Window
 import com.cmp.DataModel
+import com.cmp.ModbusModel
 
 Window {
     id: window
@@ -72,6 +73,7 @@ Window {
                 anchors.fill: parent
                 onClicked: {
                     DataModel.fetchData("meters")
+                    ModbusModel.fetchData()
                 }
             }
         }
@@ -159,7 +161,6 @@ Window {
                     Text{
                         id: textValue
                         color: "white"
-//                        text: delegate.dataValue
                         text: Math.round((delegate.dataValue + Number.EPSILON)*100)/100
                         font.pixelSize: 14
                         font.bold: true
