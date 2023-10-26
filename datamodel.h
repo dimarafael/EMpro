@@ -33,6 +33,8 @@ public:
 public slots:
     void fetchData(QString url);
     void parseData();
+    void fetchModbus();
+    void parseModbus();
 
 signals:
     void hostChanged();
@@ -42,6 +44,8 @@ private:
     QNetworkAccessManager m_networkManager;
     QNetworkReply *m_reply;
     QString m_host;
+    QTcpSocket *m_socket;
+    quint16 transactionId;
 };
 
 #endif // DATAMODEL_H

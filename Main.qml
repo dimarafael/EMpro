@@ -1,7 +1,6 @@
 import QtQuick
 import QtQuick.Window
 import com.cmp.DataModel
-import com.cmp.ModbusModel
 
 Window {
     id: window
@@ -22,7 +21,7 @@ Window {
         Rectangle{
             id: hostTextInputRectangle
             height: parent.height/2
-            width: parent.width - parent.height*4
+            width: parent.width - parent.height*5
 
             anchors{
                 left: parent.left
@@ -30,40 +29,34 @@ Window {
                 margins: 20
             }
             color: "white"
-        }
 
-        TextInput{
-            id: hostTextInput
-            height: parent.height/2
-            width: parent.width - parent.height*4
 
-            anchors{
-                left: parent.left
-                verticalCenter: parent.verticalCenter
-                margins: 25
+            TextInput{
+                id: hostTextInput
+                anchors.fill: parent
+                color: "#1e1e1e"
+                verticalAlignment: TextInput.AlignVCenter
+                font.pixelSize: 14
+                onTextEdited: {
+                    DataModel.host = text
+                }
+                text: DataModel.host
             }
-            color: "#1e1e1e"
-            verticalAlignment: TextInput.AlignVCenter
-            font.pixelSize: 14
-            onTextEdited: {
-                DataModel.host = text
-            }
-            text: DataModel.host
         }
 
         Rectangle{
-            id: updateButtonMeters
+            id: updateButtonModbus
             height: parent.height
             width: parent.height
             anchors{
-                right: parent.right
+                right: updateButtonMeasur.left
                 verticalCenter: parent.verticalCenter
                 margins: 20
             }
             color: "#1e1e1e"
             Text{
                 anchors.fill: parent
-                text: "METERS"
+                text: "ModBus"
                 color: "white"
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
@@ -72,8 +65,7 @@ Window {
             MouseArea{
                 anchors.fill: parent
                 onClicked: {
-                    DataModel.fetchData("meters")
-                    ModbusModel.fetchData()
+                    DataModel.fetchModbus()
                 }
             }
         }
@@ -100,6 +92,32 @@ Window {
                 anchors.fill: parent
                 onClicked: {
                     DataModel.fetchData("measurements")
+                }
+            }
+        }
+
+        Rectangle{
+            id: updateButtonMeters
+            height: parent.height
+            width: parent.height
+            anchors{
+                right: parent.right
+                verticalCenter: parent.verticalCenter
+                margins: 20
+            }
+            color: "#1e1e1e"
+            Text{
+                anchors.fill: parent
+                text: "METERS"
+                color: "white"
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+            }
+
+            MouseArea{
+                anchors.fill: parent
+                onClicked: {
+                    DataModel.fetchData("meters")
                 }
             }
         }
