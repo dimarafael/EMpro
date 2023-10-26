@@ -1,5 +1,4 @@
 #include "datamodel.h"
-#include "modbusmodel.h"
 
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>

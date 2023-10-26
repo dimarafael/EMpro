@@ -6,6 +6,7 @@
 #include <QAbstractListModel>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
+#include <QTimer>
 
 class DataModel : public QAbstractListModel
 {
@@ -34,6 +35,7 @@ public slots:
     void fetchData(QString url);
     void parseData();
     void fetchModbus();
+    void sendToModbus();
     void parseModbus();
 
 signals:
@@ -46,6 +48,7 @@ private:
     QString m_host;
     QTcpSocket *m_socket;
     quint16 transactionId;
+    QTimer m_timeoutTimer;
 };
 
 #endif // DATAMODEL_H

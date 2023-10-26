@@ -4,6 +4,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
+
 DataModel::DataModel(QObject *parent)
     : QAbstractListModel{parent}
 {
@@ -91,9 +92,37 @@ void DataModel::parseData()
 
 void DataModel::fetchModbus()
 {
+
+    m_socket = new QTcpSocket(this);
+    connect(m_socket, &QTcpSocket::readyRead, this, &DataModel::parseModbus);
+    connect(m_socket, &QTcpSocket::connected, this, &DataModel::sendToModbus);
+
+    connect(m_socket, &QTcpSocket::stateChanged,this,
+            [&](QAbstractSocket::SocketState st){
+                qDebug()<<"state: " << st;
+                if(st == QAbstractSocket::UnconnectedState){
+                    m_socket->deleteLater();
+                    m_socket = nullptr;
+                    qDebug() << "delete socket";
+                }
+            });
+
+    m_socket->connectToHost(host(), 502);
+    m_timeoutTimer.singleShot(1000, this, [&](){
+        if(m_socket != nullptr){
+            m_socket->deleteLater();
+            qDebug() << "Modbus timeout";
+        }
+    });
+}
+
+void DataModel::sendToModbus()
+{
+    m_timeoutTimer.stop();
     QByteArray data;
     data.resize(12);
-    transactionId++;
+
+    (transactionId >= 65535)?transactionId=1:transactionId++;
 
     data[0] = (transactionId & 0b11111111<<8)>>8; // Transaction Identifier High Byte
     data[1] = transactionId & 0b11111111; // Transaction Identifier Low Byte
@@ -107,19 +136,13 @@ void DataModel::fetchModbus()
     data[9] = 0; // Data Address
     data[10] = 0; // Number of registers
     data[11] = 10;// Number of registers
-    m_socket = new QTcpSocket(this);
-    connect(m_socket, &QTcpSocket::readyRead, this, &DataModel::parseModbus);
-
-    m_socket->connectToHost(host(), 502);
-    if(m_socket->waitForConnected()){
-        m_socket->write(data);
-    }
+    m_socket->write(data);
 }
 
 void DataModel::parseModbus()
 {
     QByteArray data = m_socket->readAll();
-    m_socket->disconnect();
+    m_socket->close();
     qDebug() << data;
 }
 
