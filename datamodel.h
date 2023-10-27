@@ -30,6 +30,10 @@ public:
 
     QString host() const;
     void setHost(const QString &newHost);
+    static quint8 lowByte(quint16 val);
+    static quint8 hiByte(quint16 val);
+    static quint16 twoBytesToWord(quint8 hi, quint8 lo);
+    static float forBytesToFloat(QByteArray* arr, int pos);
 
 public slots:
     void fetchData(QString url);
@@ -47,7 +51,9 @@ private:
     QNetworkReply *m_reply;
     QString m_host;
     QTcpSocket *m_socket;
-    quint16 transactionId;
+    quint16 transactionId = 0;
+    quint16 m_modbusAddress;
+    quint16 m_modbusLength;
     QTimer m_timeoutTimer;
 };
 

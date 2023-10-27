@@ -1,7 +1,7 @@
 #ifndef DATAITEM_H
 #define DATAITEM_H
 
-#import <QString>
+#include <QString>
 
 class DataItem
 {
