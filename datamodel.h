@@ -48,7 +48,7 @@ signals:
 private:
     QList<DataItem*> m_dataList;
     QNetworkAccessManager m_networkManager;
-    QNetworkReply *m_reply;
+    QNetworkReply *m_reply = nullptr;
     QString m_host;
     QTcpSocket *m_socket;
     quint16 transactionId = 0;

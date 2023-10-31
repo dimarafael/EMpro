@@ -229,5 +229,6 @@ float DataModel::forBytesToFloat(QByteArray* arr, int pos)
 
     float fRes;
     std::memcpy(&fRes, &bb, 4);
+
     return fRes;
 }
